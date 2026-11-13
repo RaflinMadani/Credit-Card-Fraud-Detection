@@ -1,73 +1,132 @@
 # Deteksi Transaksi Fraud Kartu Kredit Menggunakan Metode Klasifikasi
 
-Proyek UTS Data Science IF-A, Program Studi Informatika, Universitas Pembangunan Nasional "Veteran" Yogyakarta.
+Proyek Data Science (IF-A) | Dosen pengampu: Dhimas Arief Dharmawan
+Program Studi Informatika, Fakultas Teknik Industri, Universitas Pembangunan Nasional "Veteran" Yogyakarta, 2026
 
-## Ringkasan Proyek
+## Ringkasan
 
-**Masalah.** Transaksi kartu kredit semakin banyak dilakukan secara digital, sehingga risiko penipuan (fraud) ikut meningkat dan menimbulkan kerugian finansial. Pemeriksaan manual atas seluruh transaksi tidak praktis, sehingga diperlukan pendekatan berbasis data untuk mengidentifikasi transaksi yang terindikasi fraud.
+Proyek ini bertujuan mengenali transaksi fraud kartu kredit agar pelanggan tidak dibebankan transaksi yang tidak dilakukan. Tahap yang sudah dikerjakan meliputi business understanding, data gathering, exploratory data analysis (EDA), data cleaning, dan preprocessing. Tahap pemodelan direncanakan menggunakan Random Forest, diikuti evaluasi PR-AUC.
 
-**Pertanyaan.**
-1. Bagaimana memahami permasalahan bisnis dan kebutuhan analisis dalam mendeteksi transaksi kartu kredit yang terindikasi fraud?
-2. Bagaimana memahami karakteristik, struktur, dan kualitas dataset yang digunakan?
+## Anggota Tim
 
-**Metode.** Klasifikasi biner dengan target `Class` (0 = normal, 1 = fraud). Tahap yang dikerjakan saat ini adalah Business Understanding dan Data Preprocessing. Modelling dan evaluasi dikerjakan pada tahap berikutnya.
+| No | Nama | NIM |
+|----|------|-----|
+| 1 | Farabian Nabil Alauzi | 123240058 |
+| 2 | Waladi Lintang Novianto | 123240065 |
+| 3 | Raflin Madani | 123240178 |
+| 4 | Raihan Buono Putra | 123240090 |
 
-**Metrik.** PR-AUC sebagai metrik utama, serta precision, recall, dan F1 untuk kelas fraud. Accuracy tidak dijadikan acuan karena kelas sangat tidak seimbang.
+## Struktur Repositori
 
-## Anggota Kelompok dan Kontribusi
-
-| No | Nama | NIM | Kontribusi |
-| --- | --- | --- | --- |
-| 1 | Farabian Nabil Alauzi | 123240058 | [isi kontribusi] |
-| 2 | Waladi Lintang Novianto | 123240065 | [isi kontribusi] |
-| 3 | Raflin Madani | 123240178 | [isi kontribusi] |
-| 4 | Raihan Buono Putra | 123240090 | [isi kontribusi] |
+- `01_eda_representativitas_bias_uts.ipynb` - EDA, representativitas sampel acak, dan potensi bias (tugas UTS).
+- `setupV2.ipynb` - Business understanding, data gathering, EDA, cleaning, dan preprocessing.
+- `creditcard_1000.csv` - Dataset kerja (1.000 transaksi).
+- `creditcard_1000_clean.csv` - Data bersih sebelum split dan scaling (hasil run notebook).
+- `train_preprocessed.csv` - Data latih yang sudah diskalakan (hasil run notebook).
+- `test_preprocessed.csv` - Data uji yang sudah diskalakan (hasil run notebook).
+- `requirements.txt` - Daftar dependensi Python.
+- `README.md` - Dokumentasi proyek.
 
 ## Sumber Data
 
-- **Dataset:** Credit Card Fraud Detection, dipublikasikan oleh Machine Learning Group, Université Libre de Bruxelles (ULB).
-- **Tautan:** https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
-- **Lisensi:** "Database: Open Database, Contents: Database Contents" sesuai halaman Kaggle. Dipakai untuk kepentingan akademik.
-- **Berkas di repository:** `creditcard_1000.csv`, berisi 1.000 baris dengan 31 kolom (`Time`, `V1` sampai `V28`, `Amount`, `Class`).
+Dataset yang digunakan adalah Credit Card Fraud Detection dari Kaggle, dipublikasikan oleh Machine Learning Group, Universite Libre de Bruxelles (ULB).
 
-> **Catatan tentang sampel.** Dari 1.000 baris ini, 492 berlabel fraud (49,2%). Pada dataset lengkap, proporsi fraud hanya sekitar 0,17%. Sampel ini tidak mewakili proporsi tersebut, sehingga metrik dan baseline yang dihitung darinya tidak sama dengan kondisi sebenarnya. Sampel ini cocok untuk menguji alur kerja. Untuk menilai kemampuan deteksi fraud, gunakan dataset lengkap.
+- Tautan: https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
+- Isi: transaksi kartu kredit pemegang kartu di Eropa selama dua hari pada September 2013.
+- Lisensi Kaggle: Database Open Database, Contents Database Contents.
+- Sitasi: Andrea Dal Pozzolo dkk., Calibrating Probability with Undersampling for Unbalanced Classification, IEEE CIDM 2015, serta publikasi terkait lainnya yang tercantum pada halaman Kaggle.
 
-## Struktur Repository
+## Deskripsi Dataset
 
-```
-.
-+-- 01_business_understanding_preprocessing.ipynb
-+-- creditcard_1000.csv
-+-- requirements.txt
-+-- .gitignore
-+-- README.md
-```
+Dataset lengkap terdiri dari 284.807 transaksi dengan 31 kolom, di antaranya 492 transaksi fraud (0,172%). Karena sangat tidak seimbang, akurasi biasa tidak bermakna; disarankan menggunakan PR-AUC.
 
-## Cara Menjalankan
+Catatan sampling pada repo ini: dataset kerja (`creditcard_1000.csv`) adalah subset 1.000 transaksi yang terdiri dari seluruh 492 transaksi fraud ditambah 508 transaksi normal yang dipilih secara acak (`random_state=42`). Duplikat bawaan dataset asli tidak dihapus agar dapat dinilai pada tahap cleaning. Subset ini hampir seimbang, sehingga hasil EDA dan model dari subset ini tidak boleh langsung dianggap mewakili kondisi nyata di mana proporsi fraud sekitar 0,17%.
 
-1. Pastikan Python terpasang (proyek dikembangkan dengan Python 3.13.7). Disarankan memakai virtual environment.
-2. Pasang dependensi:
-   ```
-   pip install -r requirements.txt
-   ```
-3. Jalankan Jupyter dari folder repository ini:
-   ```
-   jupyter notebook
-   ```
-4. Buka `01_business_understanding_preprocessing.ipynb` lalu pilih **Run All**. Notebook membaca `creditcard_1000.csv` dari folder yang sama. Folder `processed/` dibuat otomatis berisi hasil preprocessing.
+Data dictionary ringkas:
 
-## Ringkasan Preprocessing
+| Kolom | Tipe | Deskripsi |
+|-------|------|-----------|
+| `Time` | Numerik | Detik sejak transaksi pertama dalam dataset |
+| `V1` - `V28` | Numerik | Fitur hasil transformasi PCA (dianonimkan) |
+| `Amount` | Numerik | Nominal transaksi (satuan mata uang tidak dinyatakan) |
+| `Class` | Biner | 0 = normal, 1 = fraud |
 
-- **Pembagian data.** Split 80:20 terstratifikasi dilakukan sebelum transformasi agar tidak terjadi data leakage.
-- **Duplikat.** Duplikat dihapus dari data latih. Baris uji yang identik dengan data latih juga dibuang.
-- **Outlier.** Dicatat dengan metode IQR tetapi tidak dihapus, karena transaksi fraud sering berada pada nilai ekstrem.
-- **Transformasi.** `Amount` memakai `log1p` lalu `RobustScaler`. `Time` memakai `RobustScaler`. `V1` sampai `V28` dibiarkan karena sudah hasil PCA.
-- **Pipeline.** Transformasi hanya di-fit pada data latih dan disimpan sebagai `processed/preprocessor.joblib`.
+Keterbatasan data: fitur `V1`-`V28` dianonimkan sehingga makna bisnisnya tidak dapat ditentukan; tidak ada ID transaksi; satuan mata uang pada `Amount` tidak dinyatakan; atribut kelompok sensitif tidak tersedia sehingga audit fairness terbatas.
 
-## Batasan
+## Cakupan Analisis per Notebook
 
-- Dataset hanya memuat transaksi pemegang kartu di Eropa selama dua hari pada September 2013.
-- Fitur `V1` sampai `V28` telah dianonimkan dengan PCA sehingga makna bisnisnya tidak dapat dijelaskan secara langsung.
-- Tidak tersedia informasi merchant, lokasi, perangkat, atau riwayat pemegang kartu.
-- Sampel 1.000 baris tidak mewakili proporsi fraud pada data asli.
-- Analisis bersifat offline dan tidak mencakup sistem deteksi real-time.
+- `setupV2.ipynb`: business understanding, data gathering, EDA, cleaning, preprocessing.
+- `01_eda_representativitas_bias_uts.ipynb`: kualitas data (missing value, duplikasi, outlier), EDA distribusi dan korelasi, representativitas sampel acak, potensi bias dan keterbatasan. Tidak melakukan data preparation untuk modeling.
+
+## Metodologi
+
+1. Data gathering: sumber Kaggle, lisensi, subset 1.000 transaksi.
+2. EDA: gambaran umum, distribusi kelas, distribusi `Amount` (berekor panjang ke kanan), distribusi `Time`, korelasi fitur dengan target (10 fitur dengan korelasi absolut terbesar), perbandingan distribusi fitur per kelas, missing value, duplikat, kandidat outlier dengan metode IQR.
+3. Cleaning: missing value tidak ditemukan; duplikat dihapus (seluruhnya pada kelas fraud) untuk mencegah kebocoran data antara data latih dan uji; kandidat outlier dipertahankan karena dapat merupakan sinyal fraud; transaksi dengan `Amount = 0` dipertahankan.
+4. Preprocessing: pemisahan fitur dan target, split stratified 80:20, `V1`-`V28` tidak diubah, `Amount` diskalakan dengan `RobustScaler`, `Time` dengan `StandardScaler`, scaler di-fit hanya pada data latih, verifikasi bebas kebocoran data.
+5. Representativitas sampel: simple random sampling tanpa pengembalian dengan seed 42, indikator standardized mean difference (SMD) dan interval kepercayaan Wilson 95% untuk proporsi fraud, serta catatan bias.
+## Temuan Utama
+
+- Tidak ada missing value; terdapat baris duplikat (seluruhnya pada kelas fraud) dan banyak kandidat outlier terutama pada `Amount` dan beberapa fitur PCA.
+- Korelasi absolut terbesar terhadap `Class`: `V14` (-0,751), `V4` (0,713), `V11` (0,687), `V12` (-0,685), `V10` (-0,632), `V16` (-0,600), `V3` (-0,567), `V17` (-0,562), `V9` (-0,561), `V2` (0,495).
+- Duplikat dihapus; outlier dan transaksi `Amount = 0` dipertahankan.
+- Data dibagi secara stratified 80:20 dan siap digunakan untuk tahap pemodelan.
+
+## Pemilihan Model
+
+Tim memilih algoritma Random Forest untuk tahap pemodelan. Keputusan ini didasarkan pada karakteristik 981 transaksi bersih, 30 fitur masukan, dan alur preprocessing yang telah disiapkan pada notebook `setupV2.ipynb`.
+
+Alasan pemilihan Random Forest:
+
+- Pembagian data pada pohon keputusan bekerja berdasarkan threshold nilai, sehingga tidak terpengaruh oleh sebaran `Amount` yang miring ke kanan maupun 113 data outlier yang sengaja dipertahankan.
+- Penskalaan `RobustScaler` pada `Amount` dan `StandardScaler` pada `Time` mempertahankan urutan nilai numerik, sehingga pohon dapat memproses kombinasi fitur skala dan 28 komponen PCA tanpa risiko distorsi jarak.
+- Algoritma mampu menangkap hubungan non-linear antar komponen PCA, menghubungkan fitur dengan korelasi linear tinggi seperti `V14` (-0,751) dan `V4` (0,713) dengan fitur yang korelasi linearnya rendah seperti `V19` sampai `V27` ($|r| < 0{,}27$) tetapi memiliki perbedaan sebaran pada kelas fraud.
+- Random Forest memiliki parameter bawaan `class_weight='balanced'` dan `class_weight='balanced_subsample'` untuk menangani ketidakseimbangan kelas, memudahkan adaptasi saat beralih dari sampel 981 baris ke populasi 284.807 transaksi dengan 0,172% fraud.
+- Pendekatan bagging dan subsampling fitur acak pada tiap percabangan menekan risiko overfit pada 784 baris data latih, menghasilkan model yang stabil terhadap variasi data baru.
+- Model menyediakan perhitungan feature importance berbasis penurunan impurity, memudahkan verifikasi apakah komponen PCA yang dipilih pohon sesuai dengan temuan EDA.
+- Model menghasilkan keluaran berupa probabilitas prediksi, sehingga threshold keputusan dapat digeser untuk memaksimalkan PR-AUC dan Recall kelas fraud sesuai kebutuhan deteksi transaksi mencurigakan.
+
+## Prasyarat dan Cara Menjalankan
+
+Prasyarat: Python 3, Jupyter Notebook/Lab atau Google Colab.
+
+Instal dependensi:
+
+    pip install -r requirements.txt
+
+Letakkan `creditcard.csv` (dataset lengkap) pada folder `archive/` atau root proyek jika menjalankan notebook pertama. Notebook kedua menggunakan `creditcard_1000.csv` yang sudah tersedia.
+
+Urutan eksekusi:
+
+1. Jalankan `setupV2.ipynb` dari awal sampai akhir.
+2. (Opsional) Jalankan `01_eda_representativitas_bias_uts.ipynb` untuk analisis representativitas dan bias (memerlukan dataset lengkap).
+
+Catatan: notebook pertama menggunakan `SAMPLE_SIZE = 100_000` (rentang yang diizinkan 10.000-100.000).
+
+## Output yang Dihasilkan
+
+- `creditcard_1000_clean.csv` - data bersih sebelum split dan scaling.
+- `train_preprocessed.csv` - data latih yang sudah diskalakan.
+- `test_preprocessed.csv` - data uji yang sudah diskalakan.
+
+## Keterbatasan dan Bias
+
+- Subset hampir seimbang, sedangkan kondisi nyata memiliki proporsi fraud sekitar 0,17%.
+- Fitur `V1`-`V28` dianonimkan, sehingga makna bisnis tidak dapat ditentukan.
+- Tidak ada ID transaksi, sehingga baris identik tidak pasti merupakan kesalahan pencatatan.
+- Korelasi bersifat statistik, bukan bukti sebab-akibat.
+- Atribut kelompok sensitif tidak tersedia, sehingga audit fairness terbatas.
+- Potensi kesalahan label, cakupan populasi, dan periode harus diverifikasi dari sumber asli.
+
+Untuk evaluasi akhir disarankan menggunakan precision, recall, F1, PR-AUC, dan biaya kesalahan, bukan akurasi biasa.
+
+## Status Proyek dan Pekerjaan Lanjutan
+
+Tahap saat ini mencakup data understanding, cleaning, dan preprocessing. Data latih sebanyak 784 baris dan data uji sebanyak 197 baris sudah siap digunakan untuk proses pelatihan.
+
+Rencana pekerjaan berikutnya meliputi pelatihan model Random Forest dengan 5-fold stratified cross-validation, penyetelan hyperparameter (seperti jumlah pohon dan kedalaman maksimum), penyesuaian bobot kelas (`class_weight='balanced'`), evaluasi PR-AUC pada 197 baris data uji, serta penentuan threshold keputusan berdasarkan pertimbangan kerugian fraud dibanding penolakan transaksi valid.
+
+## Lisensi dan Sitasi
+
+Lisensi data mengikuti ketentuan Kaggle. Sitasi utama: Dal Pozzolo, Andrea; Caelen, Olivier; Johnson, Reid A.; Bontempi, Gianluca. Calibrating Probability with Undersampling for Unbalanced Classification. IEEE Symposium on Computational Intelligence and Data Mining (CIDM), 2015. Daftar publikasi lengkap tercantum pada halaman dataset Kaggle.
+
