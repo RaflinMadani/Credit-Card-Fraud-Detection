@@ -47,7 +47,7 @@ File [creditcard_1000.csv](creditcard_1000.csv) merupakan subset kerja yang beri
 |---|---|---|
 | `Time` | Numerik, detik | Waktu relatif sejak transaksi pertama pada dataset. |
 | `Amount` | Numerik | Nilai transaksi. Satuan mata uang tidak dinyatakan pada file CSV. |
-| `V1`–`V28` | Numerik | Komponen hasil transformasi PCA. Makna bisnis asli dan unitnya tidak tersedia. |
+| `V1`-`V28` | Numerik | Komponen hasil transformasi PCA. Makna bisnis asli dan unitnya tidak tersedia. |
 | `Class` | Biner | Label target, 0 untuk normal dan 1 untuk fraud. |
 
 Totalnya **31 kolom**, terdiri dari 30 fitur input dan satu kolom target `Class`.
@@ -56,14 +56,12 @@ Totalnya **31 kolom**, terdiri dari 30 fitur input dan satu kolom target `Class`
 
 | File / folder | Fungsi |
 |---|---|
-| [03_proyek_akhir_svm_random_forest.ipynb](03_proyek_akhir_svm_random_forest.ipynb) | Notebook utama proyek akhir, dijalankan berurutan sampai konklusi. |
-| [setupV2.ipynb](setupV2.ipynb) | Notebook tahap awal untuk EDA, cleaning, dan preprocessing. |
-| [01_eda_representativitas_bias_uts.ipynb](01_eda_representativitas_bias_uts.ipynb) | Studi terpisah tentang sampel acak dan representativitas menggunakan dataset penuh. |
-| [creditcard_1000.csv](creditcard_1000.csv) | Dataset kerja untuk menjalankan alur klasifikasi utama. |
-| `requirements.txt` | Daftar dependensi Python pada repository. |
-| `rujukan/panduan proyek/` | Panduan proyek akhir, pedoman presentasi Progress 1, dan ketentuan UTS. |
-| `rujukan/ppt/` | PDF presentasi Progress 1 dan Progress 2. |
-| `rujukan/modul/` | Modul praktikum SVM, Random Forest, regresi, time series, dan template regresi. |
+| [03_proyek_akhir_svm_random_forest.ipynb](03_proyek_akhir_svm_random_forest.ipynb) | Notebook utama proyek akhir, memuat seluruh alur dari pemahaman bisnis hingga evaluasi. |
+| [creditcard_1000.csv](creditcard_1000.csv) | Dataset kerja utama untuk menjalankan alur klasifikasi. |
+| `requirements.txt` | Daftar dependensi pustaka Python. |
+| `rujukan/panduan proyek/` | Panduan proyek akhir dan rubrik penilaian. |
+| `rujukan/ppt/` | Berkas slide presentasi Progress 1 dan Progress 2. |
+| `rujukan/modul/` | Modul praktikum SVM, Random Forest, dan regresi. |
 
 Folder `rujukan` perlu disertakan saat membagikan repository agar tautan rujukan di notebook dapat dibuka. Notebook utama sudah memuat eksperimen seleksi fitur secara lengkap.
 
@@ -126,7 +124,7 @@ Data bersih dibagi secara **stratified 80:20** dengan seed 42, menghasilkan **78
 ### Preprocessing
 
 - Semua prediktor sudah numerik sehingga encoding tambahan tidak diperlukan.
-- **SVM** memakai Pipeline dengan `RobustScaler` untuk `Amount`, serta `StandardScaler` untuk `Time` dan `V1`–`V28`.
+- **SVM** memakai Pipeline dengan `RobustScaler` untuk `Amount`, serta `StandardScaler` untuk `Time` dan `V1`-`V28`.
 - **Random Forest** menggunakan nilai numerik asli.
 - Parameter scaling dipelajari dari bagian latih pada setiap fold validasi.
 - Rasio data bersih sekitar 51,78% normal dan 48,22% fraud. Eksperimen ini menggunakan `class_weight=None` dan tanpa resampling tambahan.
@@ -172,9 +170,9 @@ GridSearchCV memilih parameter berdasarkan rata-rata PR-AUC validasi pada 784 tr
 
 **Model terpilih adalah SVM linear berdasarkan validasi data latih.** Pada sampel uji, Random Forest menemukan dua fraud lebih banyak dengan satu alarm keliru tambahan. Hasil kedua model tetap dilaporkan; keputusan pemilihan mengikuti prosedur validasi sebelum pengujian. Selisih kecil pada sampel ini belum menetapkan keunggulan umum salah satu algoritma.
 
-PR-AUC pada notebook dihitung menggunakan integrasi trapesium kurva precision–recall. Average Precision (AP) dilaporkan terpisah. Precision, recall, F1, dan confusion matrix menggunakan ambang prediksi bawaan model. Mengubah ambang mengubah keputusan kelas dan pasangan precision/recall pada titik tertentu; kurva PR dan luasnya tetap mengikuti skor prediksi model.
+PR-AUC pada notebook dihitung menggunakan integrasi trapesium kurva precision-recall. Average Precision (AP) dilaporkan terpisah. Precision, recall, F1, dan confusion matrix menggunakan ambang prediksi bawaan model. Mengubah ambang mengubah keputusan kelas dan pasangan precision/recall pada titik tertentu; kurva PR dan luasnya tetap mengikuti skor prediksi model.
 
-Grafik pendukung pada notebook mencakup confusion matrix kedua model, kurva precision–recall, serta feature importance Random Forest. Feature importance dibaca sebagai kontribusi terhadap pembagian data pada pohon. Fitur berkorelasi dapat berbagi nilai importance dan makna bisnis asli fitur PCA tetap tidak tersedia.
+Grafik pendukung pada notebook mencakup confusion matrix kedua model, kurva precision-recall, serta feature importance Random Forest. Feature importance dibaca sebagai kontribusi terhadap pembagian data pada pohon. Fitur berkorelasi dapat berbagi nilai importance dan makna bisnis asli fitur PCA tetap tidak tersedia.
 
 ## Keterbatasan dan tindak lanjut
 
@@ -188,6 +186,6 @@ Grafik pendukung pada notebook mencakup confusion matrix kedua model, kurva prec
 
 Panduan proyek akhir meminta notebook lengkap sampai konklusi, dataset, serta README dengan ringkasan, anggota dan kontribusi, sumber data, dan cara menjalankan. Notebook utama memuat tabel pemetaan bab terhadap panduan serta tautan ke PPT dan modul di folder `rujukan`.
 
-Output utama notebook lengkap adalah hasil analisis, perbandingan model, tabel evaluasi, grafik, dan konklusi di dalam file `.ipynb`. Notebook tahap awal `setupV2.ipynb` juga dapat menghasilkan `creditcard_1000_clean.csv`, `train_preprocessed.csv`, dan `test_preprocessed.csv` saat dijalankan.
+Seluruh keluaran analisis, perbandingan model, tabel evaluasi, visualisasi grafik, dan konklusi tersimpan lengkap di dalam file notebook utama [03_proyek_akhir_svm_random_forest.ipynb](03_proyek_akhir_svm_random_forest.ipynb).
 
 Dokumentasi teknis pendukung tersedia pada [Pipeline](https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html), [GridSearchCV](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html), [RandomForestClassifier](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html), dan [pemilihan threshold klasifikasi](https://scikit-learn.org/stable/modules/classification_threshold.html).
